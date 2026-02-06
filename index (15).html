@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Be My Valentine 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+            z-index: 1000;
+            border: 3px solid #ff69b4;
+        }
+
+        .logo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3d3a3a, #3e3d3d);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff1493;
+            font-size: 0.7em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Floating hearts animation */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            animation: float linear infinite;
+            pointer-events: none;
+        }
+
+        /* Pulse animation */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Shake animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+
+        /* Bounce animation */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Page styles */
+        .page {
+            display: none;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            padding: 20px;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        /* Page 1 - Pink Valentine Background */
+        #page1 {
+            background: linear-gradient(135deg, #1f1e1e 0%, #201f1f 50%, #191819 100%);
+        }
+
+        .sticker {
+            background: rgb(218, 180, 207);
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(225, 208, 217, 0.4);
+            text-align: center;
+            animation: pulse 2s ease-in-out infinite;
+            max-width: 90%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sticker h1 {
+            color: #ff1493;
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: white;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.5);
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #ffc0cb, #ffb6c1);
+            color: #ff1493;
+        }
+
+        .no-btn:hover {
+            transform: scale(0.95);
+        }
+
+        .no-btn.shake {
+            animation: shake 0.5s;
+        }
+
+        .error-message {
+            color: #0c0c0c;
+            font-size: 1.5em;
+            margin-top: 20px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(220, 20, 60, 0.3);
+            animation: bounce 0.5s;
+        }
+
+        /* Page 2 - Thank You Page */
+        #page2 {
+            background: linear-gradient(135deg, #ffe4e1 0%, #ffd0d8 50%, #ffb6d9 100%);
+        }
+
+        .thank-you-box {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 15px 50px rgba(255, 105, 180, 0.5);
+            text-align: center;
+            animation: pulse 3s ease-in-out infinite;
+            max-width: 90%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .thank-you-box h2 {
+            color: #ff1493;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .thank-you-box p {
+            color: #ff69b4;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+
+        .gift-btn {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: white;
+            padding: 25px 60px;
+            font-size: 1.5em;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 120px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #ff1493;
+            padding: 15px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+        }
+
+        .back-btn:hover {
+            background: white;
+        }
+
+        .back-warning {
+            position: absolute;
+            top: 100px;
+            color: #dc143c;
+            font-size: 1.3em;
+            font-weight: bold;
+            animation: shake 0.5s;
+        }
+
+        /* Page 3 - Subscription Reveal */
+        #page3 {
+            background: linear-gradient(135deg, #030303 0%, #362d32 50%, #120b0f 100%);
+            color: white;
+        }
+
+        .reveal-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 90%;
+            width: 90%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .reveal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .reveal-box h2 {
+            color: #ff1493;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        .reveal-box .subtitle {
+            color: #ff69b4;
+            font-size: 1.5em;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .brand-title {
+            font-size: 2.5em !important;
+            color: #ff1493 !important;
+            margin-bottom: 10px !important;
+        }
+
+        .home-btn {
+            position: absolute;
+            top: 30px;
+            left: 120px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #ff1493;
+            padding: 15px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+        }
+
+        .home-btn:hover {
+            background: white;
+        }
+
+        .page3-back-btn {
+            position: absolute;
+            top: 30px;
+            left: 260px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #ff1493;
+            padding: 15px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+        }
+
+        .page3-back-btn:hover {
+            background: white;
+        }
+
+        .footer-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .instagram-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            color: white;
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.4em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(131, 58, 180, 0.4);
+            font-weight: bold;
+        }
+
+        .instagram-link:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(131, 58, 180, 0.6);
+        }
+
+        .video-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr 1fr !important;
+            grid-template-rows: 1fr !important;
+            gap: 25px;
+            align-items: stretch;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .video-container {
+            background: linear-gradient(135deg, #fff0f5, #ffe4e9);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.3);
+            transition: all 0.3s ease;
+            border: 3px solid #ffb6c1;
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100%;
+        }
+
+        .video-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.5);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff1493;
+            font-size: 1.2em;
+            border: 3px dashed #ff69b4;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .video-title {
+            color: #111011;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .sparkle {
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        /* Tablet design (iPad, tablets) */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+
+            .sticker h1 {
+                font-size: 2.5em;
+            }
+
+            .thank-you-box h2,
+            .reveal-box h2 {
+                font-size: 2.3em;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .video-container:last-child {
+                grid-column: 1 / -1;
+                max-width: 50%;
+                margin: 0 auto;
+            }
+
+            button {
+                padding: 18px 45px;
+                font-size: 1.4em;
+            }
+
+            .reveal-box {
+                padding: 40px 30px;
+                width: 92%;
+            }
+        }
+
+        /* Mobile design (phones) */
+        @media (max-width: 768px) {
+            .logo {
+                width: 60px;
+                height: 60px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .logo-placeholder {
+                font-size: 0.6em;
+            }
+
+            .back-btn {
+                left: 85px;
+                padding: 10px 18px;
+                font-size: 0.85em;
+            }
+
+            .home-btn {
+                left: 85px;
+                padding: 10px 18px;
+                font-size: 0.85em;
+            }
+
+            .page3-back-btn {
+                left: 180px;
+                padding: 10px 18px;
+                font-size: 0.85em;
+            }
+
+            .sticker {
+                padding: 30px 25px;
+            }
+
+            .sticker h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+
+            .button-container {
+                gap: 15px;
+            }
+            
+            button {
+                padding: 15px 30px;
+                font-size: 1.1em;
+            }
+
+            .thank-you-box {
+                padding: 35px 25px;
+            }
+
+            .thank-you-box h2,
+            .reveal-box h2 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+
+            .thank-you-box p {
+                font-size: 1.1em;
+                margin-bottom: 20px;
+            }
+
+            .gift-btn {
+                padding: 20px 40px;
+                font-size: 1.2em;
+            }
+
+            .reveal-box .subtitle {
+                font-size: 1em;
+            }
+
+            .reveal-box .subtitle h3 {
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+
+            .brand-title {
+                font-size: 1.5em !important;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr !important;
+                gap: 20px;
+            }
+
+            .reveal-box {
+                padding: 25px 15px;
+                width: 95%;
+            }
+
+            .video-placeholder {
+                height: 150px;
+                font-size: 1em;
+            }
+
+            .video-container {
+                padding: 20px;
+            }
+
+            .video-title {
+                font-size: 1em;
+            }
+
+            .instagram-link {
+                font-size: 1.1em;
+                padding: 12px 30px;
+            }
+
+            .error-message {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Small mobile (smaller phones) */
+        @media (max-width: 480px) {
+            .logo {
+                width: 50px;
+                height: 50px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .back-btn {
+                left: 70px;
+                padding: 8px 15px;
+                font-size: 0.75em;
+                top: 20px;
+            }
+
+            .home-btn {
+                left: 70px;
+                padding: 8px 15px;
+                font-size: 0.75em;
+                top: 20px;
+            }
+
+            .page3-back-btn {
+                left: 155px;
+                padding: 8px 15px;
+                font-size: 0.75em;
+                top: 20px;
+            }
+
+            .sticker {
+                padding: 25px 20px;
+            }
+
+            .sticker h1 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+
+            .thank-you-box h2,
+            .reveal-box h2 {
+                font-size: 1.5em;
+            }
+
+            .thank-you-box p {
+                font-size: 1em;
+            }
+
+            .reveal-box .subtitle h3 {
+                font-size: 0.8em;
+            }
+
+            .video-container {
+                padding: 15px;
+            }
+
+            .instagram-link {
+                font-size: 1em;
+                padding: 10px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page 1: Will You Be My Valentine? -->
+    <div id="page1" class="page active">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="Videos/njokisites_logo-removebg-preview (1).png" alt="Njoki Sites Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+        </div>
+
+        <div class="sticker">
+            <h1>💕 Will You Be My Valentine? 💕</h1>
+            <div class="button-container">
+                <button class="yes-btn" onclick="goToPage2()">Yes! 💖</button>
+                <button class="no-btn" id="noBtn" onclick="handleNo()">No</button>
+            </div>
+            <div id="errorMsg" class="error-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Page 2: Thank You -->
+    <div id="page2" class="page">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="Videos/njokisites_logo-removebg-preview (1).png" alt="Njoki Sites Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+        </div>
+
+        <!-- Back Button -->
+        <button class="back-btn" onclick="handleBack()">← Back</button>
+        
+        <!-- Back Warning Message -->
+        <div id="backWarning" class="back-warning" style="display: none;"></div>
+        
+        <!-- Thank You Box -->
+        <div class="thank-you-box">
+            <h2>💝 Thank You for Choosing Me! 💝</h2>
+            <p>You've made me the happiest! ✨</p>
+            <p>Please press here to receive your Valentine's gift 🎁</p>
+            <button class="gift-btn" onclick="goToPage3()">Claim Your Gift! 🎁</button>
+        </div>
+    </div>
+
+    <!-- Page 3: Subscription Reveal -->
+    <div id="page3" class="page">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="Videos/njokisites_logo-removebg-preview (1).png" alt="Njoki Sites Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+        </div>
+
+        <!-- Home Button -->
+        <button class="home-btn" onclick="goToPage1()">🏠 Home</button>
+
+        <!-- Back Button -->
+        <button class="page3-back-btn" onclick="goBackToPage2()">← Back</button>
+
+        <div class="reveal-box">
+            <!-- Congratulations Message -->
+            <div class="reveal-header">
+                <h2 class="sparkle">🎉 Congratulations! 🎉</h2>
+                <div class="subtitle brand-title"><h3>✨ NJOKI SITES ✨</h3></div>
+                <div class="subtitle"><h3>You have won unlimited access to our services:
+                <br> Web Creation, Maintenance and Development
+                <br> SEO Optimisation and Web Consultation
+                </h3></div>
+            </div>
+
+            <!-- Enjoy Our Past Work Heading -->
+            <div style="margin: 30px 0 25px 0;">
+                <h3 style="color: #ff1493; font-size: 1.8em; text-align: center; font-weight: bold;">
+                    💼 Enjoy Our Past Work
+                </h3>
+            </div>
+
+            <!-- Three Videos in One Row -->
+            <div class="video-grid">
+                <!-- Video 1 - Left -->
+                <div class="video-container">
+                    <video 
+                        width="100%" 
+                        height="200" 
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        style="border-radius: 15px; object-fit: cover;">
+                        <source src="Videos/aceneat.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-title">Aceneat Project</div>
+                </div>
+
+                <!-- Video 2 - Middle -->
+                <div class="video-container">
+                    <video 
+                        width="100%" 
+                        height="200" 
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        style="border-radius: 15px; object-fit: cover;">
+                        <source src="Videos/Didge.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-title">Didge Project</div>
+                </div>
+
+                <!-- Video 3 - Right -->
+                <div class="video-container">
+                    <video 
+                        width="100%" 
+                        height="200" 
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        style="border-radius: 15px; object-fit: cover;">
+                        <source src="Videos/neatspace.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-title">Neatspace Project</div>
+                </div>
+            </div>
+
+            <!-- Instagram Link -->
+            <div class="footer-section">
+                <a href="https://www.instagram.com/njoki_sites?igsh=MTY3ZXA1YWZyczcwZw==" target="_blank" class="instagram-link">
+                    📱 Follow @njoki_sites on Instagram
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '💕';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+
+        setInterval(createHeart, 300);
+
+        // Page 1 Logic
+        let noClickCount = 0;
+        const noMessages = [
+            "⚠️ Error! Please be my Valentine! 💔",
+            "❌ You MUST be my Valentine! 💕",
+            "🚫 You MUST press Yes! 💖"
+        ];
+
+        function handleNo() {
+            const errorMsg = document.getElementById('errorMsg');
+            const noBtn = document.getElementById('noBtn');
+            
+            if (noClickCount < noMessages.length) {
+                errorMsg.textContent = noMessages[noClickCount];
+                errorMsg.style.display = 'block';
+                noBtn.classList.add('shake');
+                
+                setTimeout(() => {
+                    noBtn.classList.remove('shake');
+                }, 500);
+                
+                noClickCount++;
+            }
+        }
+
+        function goToPage2() {
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        }
+
+        // Page 2 Logic
+        let backClickCount = 0;
+
+        function handleBack() {
+            const backWarning = document.getElementById('backWarning');
+            
+            if (backClickCount === 0) {
+                backWarning.textContent = "⚠️ Please take your gift first! 🎁";
+                backWarning.style.display = 'block';
+                
+                setTimeout(() => {
+                    backWarning.style.display = 'none';
+                }, 2000);
+                
+                backClickCount++;
+            } else {
+                // Second click - go back to page 1
+                document.getElementById('page2').classList.remove('active');
+                document.getElementById('page1').classList.add('active');
+                backClickCount = 0; // Reset for next time
+            }
+        }
+
+        function goToPage3() {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page3').classList.add('active');
+        }
+
+        // Page 3 Navigation
+        function goToPage1() {
+            document.getElementById('page3').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+        }
+
+        function goBackToPage2() {
+            document.getElementById('page3').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        }
+    </script>
+</body>
+</html>

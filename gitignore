@@ -1,0 +1,19 @@
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Optional: Add your images here if you don't want to commit them
+# images/
+# *.jpg
+# *.png
+# *.gif
